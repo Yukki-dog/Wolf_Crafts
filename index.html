@@ -10,20 +10,41 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
   body{
+  body {
   font-family:'Patrick Hand',cursive;
-background: linear-gradient(
-  180deg,
-  #d8b6f0 0%,    /* сиреневый сверху */
-  #a3c8f0 30%,   /* плавный переход в голубой */
-  #f0b6d9 60%,   /* голубой в розовый */
-  #d8b6f0 90%    /* розовый в сиреневый снизу */
-);
-
   color:#fff;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
+  margin:0;
 }
+
+/* секции с отдельными цветами */
+#about {
+  background: #d8b6f0; /* сиреневый */
+}
+
+#best {
+  background: #a3c8f0; /* голубой */
+}
+
+#old {
+  background: #f0b6d9; /* розовый */
+}
+
+#pro {
+  background: #d8b6f0; /* сиреневый */
+}
+
+#contacts {
+  background: #a3c8f0; /* голубой */
+}
+
+/* плавный переход между секциями */
+.section {
+  transition: background 0.8s ease;
+}
+
 
     a{color:inherit;text-decoration:none}
 
