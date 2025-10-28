@@ -11,9 +11,14 @@
     html,body{height:100%}
   body{
   font-family:'Patrick Hand',cursive;
-  background: linear-gradient(180deg, #efc9f0 0%, #e4c7e8 50%, #b5c8e6 100%);
-  background-size:400% 400%;
-  animation: bgMove 20s ease-in-out infinite;
+background: linear-gradient(
+  180deg,
+  #d8b6f0 0%,    /* сиреневый сверху */
+  #a3c8f0 30%,   /* плавный переход в голубой */
+  #f0b6d9 60%,   /* голубой в розовый */
+  #d8b6f0 90%    /* розовый в сиреневый снизу */
+);
+
   color:#fff;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
@@ -339,37 +344,47 @@
     /* ====== ensure exact "Обо мне" blocks are not modified programmatically ====== */
     // they have attribute data-exact; do not touch them in translations
     // nothing further needed – we preserve content as-is
-    /* ====== 🔊 Музыкальная кнопка ====== */
-    // 1. Удаляем RU и заменяем EN на 🔊
-    const ruBtn = document.getElementById('btn-ru');
-    if (ruBtn) ruBtn.remove();
+// музыка
+const ruBtn = document.getElementById('btn-ru');
+if (ruBtn) ruBtn.remove();
 
-    const enBtn = document.getElementById('btn-en');
-    if (enBtn) {
-      enBtn.textContent = '🔊';
-      enBtn.id = 'sound-btn';
+const enBtn = document.getElementById('btn-en');
+if (enBtn) {
+  enBtn.textContent = '🔈'; // изначально звук выключен
+  enBtn.id = 'sound-btn';
+}
+
+const audio = new Audio('Music.m4a');
+audio.loop = true;
+audio.volume = 0; // начинаем с нуля
+let playing = false;
+
+const soundBtn = document.getElementById('sound-btn');
+
+function fadeAudio(targetVolume, duration = 500) {
+  const step = (targetVolume - audio.volume) / (duration / 50);
+  const fadeInterval = setInterval(() => {
+    audio.volume = Math.min(Math.max(audio.volume + step, 0), 1);
+    if ((step > 0 && audio.volume >= targetVolume) || (step < 0 && audio.volume <= targetVolume)) {
+      audio.volume = targetVolume;
+      clearInterval(fadeInterval);
+      if (targetVolume === 0) audio.pause();
     }
+  }, 50);
+}
 
-    // 2. Добавляем музыку
-    const audio = new Audio('Music.m4a');
-    audio.loop = true; // если нужно, чтобы играла бесконечно
-
-    // 3. Реакция на клик
-    const soundBtn = document.getElementById('sound-btn');
-    let playing = false;
-
-    soundBtn.addEventListener('click', () => {
-      if (!playing) {
-        audio.play();
-        soundBtn.textContent = '🔈';
-        playing = true;
-      } else {
-        audio.pause();
-        audio.currentTime = 0; // если хочешь, чтобы начинало заново
-        soundBtn.textContent = '🔊';
-        playing = false;
-      }
-    });
+soundBtn.addEventListener('click', () => {
+  if (!playing) {
+    audio.play();
+    fadeAudio(1, 500); // плавно включаем
+    soundBtn.textContent = '🔊'; 
+    playing = true;
+  } else {
+    fadeAudio(0, 500); // плавно выключаем
+    soundBtn.textContent = '🔈'; 
+    playing = false;
+  }
+});
 
   </script>
 </body>
