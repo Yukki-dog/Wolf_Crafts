@@ -338,6 +338,37 @@
     /* ====== ensure exact "Обо мне" blocks are not modified programmatically ====== */
     // they have attribute data-exact; do not touch them in translations
     // nothing further needed – we preserve content as-is
+    /* ====== 🔊 Музыкальная кнопка ====== */
+    // 1. Удаляем RU и заменяем EN на 🔊
+    const ruBtn = document.getElementById('btn-ru');
+    if (ruBtn) ruBtn.remove();
+
+    const enBtn = document.getElementById('btn-en');
+    if (enBtn) {
+      enBtn.textContent = '🔊';
+      enBtn.id = 'sound-btn';
+    }
+
+    // 2. Добавляем музыку
+    const audio = new Audio('Music.m4a');
+    audio.loop = true; // если нужно, чтобы играла бесконечно
+
+    // 3. Реакция на клик
+    const soundBtn = document.getElementById('sound-btn');
+    let playing = false;
+
+    soundBtn.addEventListener('click', () => {
+      if (!playing) {
+        audio.play();
+        soundBtn.textContent = '🔈';
+        playing = true;
+      } else {
+        audio.pause();
+        audio.currentTime = 0; // если хочешь, чтобы начинало заново
+        soundBtn.textContent = '🔊';
+        playing = false;
+      }
+    });
 
   </script>
 </body>
