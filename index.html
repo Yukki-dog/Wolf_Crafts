@@ -330,24 +330,27 @@
     modalClose.addEventListener('click',closeModal);
     modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(); });
 
-    /* ====== Fade-in text only when scrolling down. hide on scroll up. ====== */
-    let lastScroll = window.scrollY;
-    const blocks = els('.text-block');
+   /* ====== Fade-in text only when scrolling. hide only when block leaves BOTTOM ====== */
+const blocks = els('.text-block');
 
-    function checkVisibleOnScroll(){
-      const current = window.scrollY;
-      const directionDown = current > lastScroll;
-      blocks.forEach(b=>{
-        const rect = b.getBoundingClientRect();
-        const inView = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
-        if(inView && directionDown){ b.classList.add('visible'); }
-        if(!directionDown){ b.classList.remove('visible'); }
-      });
-      lastScroll = current;
+function checkVisibleOnScroll(){
+  blocks.forEach(b=>{
+    const rect = b.getBoundingClientRect();
+    // показываем, если блок хотя бы наполовину виден сверху
+    if(rect.top < window.innerHeight && rect.bottom > 0){
+      b.classList.add('visible');
+    } else if(rect.top > window.innerHeight){ 
+      // скрываем только если блок ушёл за нижнюю границу
+      b.classList.remove('visible');
     }
-    window.addEventListener('scroll',checkVisibleOnScroll);
-    // initial check
-    setTimeout(checkVisibleOnScroll,200);
+  });
+}
+
+// запуск проверки при скролле
+window.addEventListener('scroll', checkVisibleOnScroll);
+// и при загрузке страницы
+setTimeout(checkVisibleOnScroll, 200);
+
 
     /* ====== Click-to-highlight specific art when clicking interactive word (example: "лучшие работы") ====== */
     // make the hero "Мои лучшие работы" pill also highlight the first art when clicked briefly
