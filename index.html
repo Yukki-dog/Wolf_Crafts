@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wolf_Crafts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ====== Reset & base ====== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Caveat',cursive;
+      background:linear-gradient(180deg,#efc9f0 0%,#b5c8e6 100%);
+      background-size:400% 400%;
+      animation: bgMove 20s ease-in-out infinite;
+      color:#fff;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit;text-decoration:none}
+
+    @keyframes bgMove{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    /* ====== Layout ====== */
+    header{position:fixed;left:20px;top:20px;z-index:1200;display:flex;gap:10px}
+    .lang-btn{background:#ffebf0;color:#333;border-radius:18px;padding:6px 10px;box-shadow:0 6px 14px #f0c9d4;cursor:pointer;user-select:none;transition:transform .25s ease,box-shadow .25s ease}
+    .lang-btn:hover{transform:scale(1.08);box-shadow:0 10px 22px #cbc9f0}
+
+    .container{width:100%;min-height:100vh;display:flex;flex-direction:column}
+    .section{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:60px 20px}
+    .section-inner{width:100%;max-width:1200px;margin:0 auto}
+
+    /* ====== Title (centerpiece) ====== */
+    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+    #site-title{font-size:clamp(36px,8vw,96px);color:#ffffff;text-shadow:0 8px 28px rgba(203,201,240,.45),0 0 8px rgba(203,201,240,.25);transform-origin:center;animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(-0.2deg) scale(1)}50%{transform:translateY(-12px) rotate(0.2deg) scale(1.03)}}
+
+    /* nav buttons in hero */
+    .hero-actions{display:flex;gap:18px;flex-wrap:wrap}
+    .nav-pill{background:#ffebf0;padding:14px 30px;border-radius:50px;box-shadow:0 8px 26px #f0c9d4;cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+    .nav-pill:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 18px 40px #cbc9f0}
+
+    /* floating soft circles */
+    .bubble{position:absolute;border-radius:50%;background:#ffffff;opacity:.12;filter:blur(12px);pointer-events:none}
+
+    /* text blocks (appearance animation) */
+    .text-block{font-size:20px;line-height:1.4;color:#fff;max-width:900px;margin:18px auto;opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;text-shadow:0 6px 18px rgba(203,201,240,.25)}
+    .text-block.visible{opacity:1;transform:translateY(0)}
+
+    /* cards & gallery */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-top:28px}
+    .art-card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border-radius:12px;padding:10px;backdrop-filter:blur(6px);position:relative;overflow:visible}
+    .art-thumb{width:100%;height:260px;object-fit:cover;border-radius:10px;display:block;transition:transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s}
+    .art-card:hover .art-thumb{transform:scale(1.06);box-shadow:0 18px 40px rgba(203,201,240,.15)}
+    .art-caption{margin-top:10px;font-size:14px;color:#fff;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
+    .art-card:hover .art-caption{opacity:1;transform:translateY(0)}
+
+    /* highlighted / pulsing animation for selected art */
+    .highlight{animation:highlightPulse 1.2s ease-in-out infinite}
+    @keyframes highlightPulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);z-index:1400;opacity:0;pointer-events:none;transition:opacity .35s ease}
+    .modal.open{opacity:1;pointer-events:auto}
+    .modal-card{background:#fff;border-radius:16px;padding:18px;max-width:92vw;max-height:92vh;overflow:auto;animation:popIn .35s cubic-bezier(.2,.9,.2,1)}
+    @keyframes popIn{from{transform:scale(.85) translateY(12px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+    .modal-card img{max-width:100%;height:auto;border-radius:8px;display:block}
+    .modal-close{position:absolute;top:14px;right:18px;background:#ffebf0;border-radius:8px;padding:6px 10px;cursor:pointer;box-shadow:0 6px 14px #f0c9d4}
+
+    /* small helper styles */
+    h2.section-title{font-size:clamp(22px,4vw,40px);margin-bottom:12px;text-align:center;color:#fff;text-shadow:0 6px 18px rgba(203,201,240,.25)}
+    footer{padding:40px 20px;text-align:center;color:#fff}
+
+    /* responsive tweaks */
+    @media(max-width:720px){.art-thumb{height:180px}}    
+  </style>
+</head>
+<body>
+  <!-- floating bubbles -->
+  <div class="bubble" style="width:220px;height:220px;left:5%;top:60%;animation:float1 36s linear infinite"></div>
+  <div class="bubble" style="width:140px;height:140px;left:70%;top:80%;animation:float2 28s linear infinite"></div>
+  <div class="bubble" style="width:100px;height:100px;left:40%;top:85%;animation:float3 44s linear infinite"></div>
+
+  <header>
+    <div class="lang-btn" data-lang="ru" id="btn-ru">RU</div>
+    <div class="lang-btn" data-lang="en" id="btn-en">EN</div>
+  </header>
+
+  <main class="container" id="page">
+
+    <!-- HERO -->
+    <section class="section" id="home">
+      <div class="section-inner title-wrap">
+        <h1 id="site-title">Wolf_Crafts</h1>
+        <div class="hero-actions">
+          <div class="nav-pill" data-target="about">Обо мне</div>
+          <div class="nav-pill" data-target="best">Мои лучшие работы</div>
+          <div class="nav-pill" data-target="old">Мои старые работы</div>
+          <div class="nav-pill" data-target="pro">Про рисунки</div>
+          <div class="nav-pill" data-target="contacts">Контакты</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT (must be EXACT text provided by user) -->
+    <section class="section" id="about">
+      <div class="section-inner">
+        <h2 class="section-title">Wolf_Crafts – обо мне</h2>
+        <div class="text-block" data-exact>
+Привет! Мой ник в интернете - Wolf_Crafts. Я Украинка, и молодая художница.
+Рисую я с конца мая 2025 года, и с тех пор рисую каждый день, всё чему хочу научиться — учусь сама, только по YouTube-туториалам. Школ, учителей и курсов у меня нет.
+
+Я рисую в стиле аниме, в основном людей. Также умею рисовать волков (только в профиль), чуть чуть котов и драконов. Начиная с 27/10 учусь рисовать людей в профиль — и... пока выходит ужасно. Я хотела бы научиться рисовать руки лучше, возможно детально глаза, и хотела бы понять перспективу.
+        </div>
+        <div class="text-block" data-exact>
+~~~ Техника и инструменты
+
+Раньше рисовала на компьютере в Krita с планшетом для рисования. 
+С сентября 2025 года мне больше нравится традиционное рисование.
+        </div>
+        <div class="text-block" data-exact>
+~~~ Процесс и вдохновение
+
+Я всегда все свои арты делаю с воображения, референсы использовать не люблю. если же я все таки использую их, подписываю это где-то на картине, либо, если там забыла подписать, то когда выставляю работу онлайн - пишу это отдельно
+Люблю рисовать фан-арты персонажей из игр (особенно Бравл Старс) и своих собственных персонажей.
+Вдохновляюсь стилем других художников, например Hanacue (https://www.youtube.com/@hanacue).
+        </div>
+        <div class="text-block" data-exact>
+~~~~ Организация работ
+
+У меня на компьютере есть миллион таймплайсов и в 7 раз больше скетчей. На YouTube естьвидео-туториал "как рисовать анатомию тела" от меня ;) :
+
+* **туториал по анатомии:** https://www.youtube.com/watch?v=obsGiHWsB_8
+        </div>
+        <div class="text-block" data-exact>
+          
+~~~~ Любимые вещи: рисовать фан-арты чужих и своих персонажей. играть в Бравл Старс (поэтому часто рисую персонажей по этой вселенной). включать музыку, когда рисую. Мне сложнее всего рисовать руки и левый глаз, особенно когда правый получается идеально, так что, так сказать, "любимая вещь" это рисовать персонажу челку. Люблю сладкое и фрукты, предпочитаю собак. Если и смотрю фильмы, то нравится смотреть комедии. обожаю еду из макдональдса, особенно - их коктейли (ммммм...)
+          
+            </div>
+        <div class="text-block" data-exact>
+~~~~ НЕ любимые вещи: овощи, чай, ужастики. нууу... есть и другие вещи, но мне немного лень их писать))
+
+        </div>
+      </div>
+    </section>
+
+    <!-- BEST WORKS -->
+    <section class="section" id="best">
+      <div class="section-inner">
+        <h2 class="section-title">Мои лучшие работы</h2>
+        <div class="gallery" id="best-gallery">
+          <!-- exact list from user -->
+          <div class="art-card" data-file="1.png" data-title="1.png — моя первая законченная работа, любимая">
+            <img class="art-thumb" src="1.png" alt="1.png — моя первая законченная работа, любимая">
+            <div class="art-caption"> обожаю эту работу. одна из любимых </div>
+          </div>
+          <div class="art-card" data-file="2.png" data-title="2.png — первая страница скетчбука... не скажу что лучшая работа, но одна из самых новых, и тех, которыми горжусь ;)">
+            <img class="art-thumb" src="2.png" alt="2.png — первая страница скетчбука... не скажу что лучшая работа, но одна из самых новых, и тех, которыми горжусь ;)">
+            <div class="art-caption"> первая страница скетчбука... не скажу что лучшая работа, но одна из самых новых, и тех, которыми горжусь ;)</div>
+          </div>
+          <div class="art-card" data-file="3.png" data-title="3.png — Мэлоди из Бравл Старс (смотрела только 3D-модель, не срисовывала позу)">
+            <img class="art-thumb" src="3.png" alt="3.png — Мэлоди из Бравл Старс (смотрела только 3D-модель, не срисовывала позу)">
+            <div class="art-caption"> Мэлоди из Бравл Старс, рисунок еще не совсем доделан (смотрела только на 3D-модель, не срисовывала позу)</div>
+          </div>
+          <div class="art-card" data-file="4.png" data-title="4.png — Эмз из Бравл Старс (аналогично)">
+            <img class="art-thumb" src="4.png" alt="4.png — Эмз из Бравл Старс (аналогично)">
+            <div class="art-caption"> Эмз из Бравл Старс делает селфи (смотрела только на 3D модель, не срисовывала позу)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OLD WORKS -->
+    <section class="section" id="old">
+      <div class="section-inner">
+        <h2 class="section-title">Старые работы</h2>
+        <div class="gallery" id="old-gallery">
+          <div class="art-card" data-file="5.png" data-title="5.png — нарисовано без референсов, 01.06.2025">
+            <img class="art-thumb" src="5.png" alt="5.png — нарисовано без референсов, 01.06.2025">
+            <div class="art-caption"> нарисовано без референсов, 01.06.2025</div>
+          </div>
+          <div class="art-card" data-file="6.png" data-title="6.png — персонаж из Roblox одноклассницы diorka, 21.07.2025">
+            <img class="art-thumb" src="6.png" alt="6.png — персонаж из Roblox одноклассницы diorka, 21.07.2025">
+            <div class="art-caption"> — персонаж из *Roblox* моей одноклассницы, её ник diorka, 21.07.2025</div>
+          </div>
+          <div class="art-card" data-file="7.png" data-title="7.png — 12.05.2025">
+            <img class="art-thumb" src="7.png" alt="7.png — 12.05.2025">
+            <div class="art-caption"> 12.05.2025</div>
+          </div>
+          <div class="art-card" data-file="8.png" data-title="8.png — Принцесса Пич из Mario, 23.07.2025">
+            <img class="art-thumb" src="8.png" alt="8.png — Принцесса Пич из Mario, 23.07.2025">
+            <div class="art-caption"> Принцесса Пич из Mario, 23.07.2025</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRO RYSUNKY -->
+    <section class="section" id="pro">
+      <div class="section-inner">
+        <h2 class="section-title">Про рисунки</h2>
+        <div class="text-block" data-exact>
+Когда я рисую на компьютере, то использую программу Krita. моя любимая кисть там - это самая обычная кисть. (хотя странно, там такой большой выбор...)
+
+когда рисую на бумаге, то использую свой Скетчбук (который, кстати, я купила в Авроре) и карандаши бренда Faber-Castell. 
+        </div>
+        <div style="margin-top:18px;display:flex;gap:12px;align-items:center;justify-content:center">
+          <img src="a.png" alt="a.png" style="width:88px;height:88px;border-radius:10px;object-fit:cover;box-shadow:0 12px 30px rgba(0,0,0,.15)">
+          <img src="b.png" alt="b.png" style="width:88px;height:88px;border-radius:10px;object-fit:cover;box-shadow:0 12px 30px rgba(0,0,0,.15)">
+          <img src="c.png" alt="c.png" style="width:88px;height:88px;border-radius:10px;object-fit:cover;box-shadow:0 12px 30px rgba(0,0,0,.15)">
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="section" id="contacts">
+      <div class="section-inner">
+        <h2 class="section-title">Контакты</h2>
+        <div class="text-block" data-exact>
+Мой ютуб канал: https://www.youtube.com/@Wolf_Crafts
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © Wolf_Crafts — все права на арты принадлежат автору ;)
+    </footer>
+  </main>
+
+  <!-- MODAL (single) -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-close" id="modal-close">✕</div>
+      <img src="" id="modal-img" alt="">
+      <p id="modal-desc" style="margin-top:12px;color:#333;text-align:left"></p>
+    </div>
+  </div>
+
+  <script>
+    /* ====== Helpers ====== */
+    function el(q, ctx=document){return ctx.querySelector(q)}
+    function els(q, ctx=document){return Array.from(ctx.querySelectorAll(q))}
+
+    /* ====== Smooth section scrolling ====== */
+    els('.nav-pill').forEach(btn=>btn.addEventListener('click',e=>{
+      const id = btn.dataset.target;
+      const section = document.getElementById(id);
+      if(section) section.scrollIntoView({behavior:'smooth',block:'start'});
+    }));
+
+    /* ====== Floating bubble keyframes variations ====== */
+    const styleSheet = document.createElement('style');
+    styleSheet.innerHTML = `@keyframes float1{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-200px) translateX(60px)}100%{transform:translateY(0) translateX(0)}}
+    @keyframes float2{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-300px) translateX(-100px)}100%{transform:translateY(0) translateX(0)}}
+    @keyframes float3{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-250px) translateX(120px)}100%{transform:translateY(0) translateX(0)}}`;
+    document.head.appendChild(styleSheet);
+
+    /* ====== Gallery interactions: hover caption + click modal ====== */
+    const modal = el('#modal');
+    const modalImg = el('#modal-img');
+    const modalDesc = el('#modal-desc');
+    const modalClose = el('#modal-close');
+
+    function openModal(card){
+      const img = card.querySelector('.art-thumb');
+      const title = card.dataset.title || img.alt || '';
+      modalImg.src = img.src;
+      modalImg.alt = img.alt || '';
+      modalDesc.textContent = title;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      // disable scroll behind modal
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      // smooth close animation -> small timeout to allow opacity transition
+      setTimeout(()=>{ modalImg.src = ''; modalDesc.textContent = '' },350);
+    }
+
+    els('.art-card').forEach(card=>{
+      card.addEventListener('click',e=>{
+        openModal(card);
+      });
+    });
+    modalClose.addEventListener('click',closeModal);
+    modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(); });
+
+    /* ====== Fade-in text only when scrolling down. hide on scroll up. ====== */
+    let lastScroll = window.scrollY;
+    const blocks = els('.text-block');
+
+    function checkVisibleOnScroll(){
+      const current = window.scrollY;
+      const directionDown = current > lastScroll;
+      blocks.forEach(b=>{
+        const rect = b.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
+        if(inView && directionDown){ b.classList.add('visible'); }
+        if(!directionDown){ b.classList.remove('visible'); }
+      });
+      lastScroll = current;
+    }
+    window.addEventListener('scroll',checkVisibleOnScroll);
+    // initial check
+    setTimeout(checkVisibleOnScroll,200);
+
+    /* ====== Click-to-highlight specific art when clicking interactive word (example: "лучшие работы") ====== */
+    // make the hero "Мои лучшие работы" pill also highlight the first art when clicked briefly
+    const bestGallery = el('#best-gallery');
+    els('[data-target="best"]').forEach(btn=>btn.addEventListener('click',()=>{
+      // small pulse on the first artwork after scroll
+      setTimeout(()=>{
+        const first = bestGallery && bestGallery.querySelector('.art-card');
+        if(first){ first.classList.add('highlight'); setTimeout(()=>first.classList.remove('highlight'),1800); }
+      },700);
+    }));
+
+    /* ====== tiny UX: keyboard escape to close modal ====== */
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+    /* ====== make sure images are accessible and captions appear on hover, also show small info under thumb on hover (already via .art-caption) ====== */
+    // ensure every art-card has proper caption from data-title
+    els('.art-card').forEach(card=>{
+      const caption = card.dataset.title || '';
+      const capEl = card.querySelector('.art-caption');
+      if(capEl && caption) capEl.textContent = caption;
+    });
+
+    /* ====== ensure exact "Обо мне" blocks are not modified programmatically ====== */
+    // they have attribute data-exact; do not touch them in translations
+    // nothing further needed – we preserve content as-is
+
+  </script>
+</body>
+</html>
