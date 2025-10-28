@@ -60,10 +60,9 @@
     #site-title{font-size:clamp(36px,8vw,96px);color:#ffffff;text-shadow:0 8px 28px rgba(203,201,240,.45),0 0 8px rgba(203,201,240,.25);transform-origin:center;animation:float 6s ease-in-out infinite}
     @keyframes float{0%,100%{transform:translateY(0) rotate(-0.2deg) scale(1)}50%{transform:translateY(-12px) rotate(0.2deg) scale(1.03)}}
 
-    //* nav buttons in hero */
+ /* nav buttons in hero */
 .hero-actions {
   display: flex;
-  gap: 40px;
   flex-wrap: wrap;
 }
 
@@ -74,6 +73,11 @@
   box-shadow: 0 8px 26px #f0c9d4;
   cursor: pointer;
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
+  margin-right: 40px; /* отступ между кнопками */
+}
+
+.nav-pill:last-child {
+  margin-right: 0; /* убираем отступ у последней кнопки */
 }
 
 .nav-pill:hover {
