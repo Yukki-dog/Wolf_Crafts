@@ -9,40 +9,42 @@
     /* ====== Reset & base ====== */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
-  body {
-  font-family:'Patrick Hand',cursive;
-  color:#fff;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  margin:0;
-}
+    
+    body {
+      font-family:'Patrick Hand',cursive;
+      color:#fff;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      margin:0;
+      background: #d8b6f0; /* базовый сиреневый сверху */
+    }
 
-/* плавный градиент для каждой секции */
-#about {
-  background: linear-gradient(to bottom, #d8b6f0 0%, #d8b6f0 100%);
-}
+    /* плавный градиент для каждой секции */
+    #about {
+      background: linear-gradient(to bottom, #d8b6f0 0%, #d8b6f0 100%);
+    }
 
-#best {
-  background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
-}
+    #best {
+      background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
+    }
 
-#old {
-  background: linear-gradient(to bottom, #a3c8f0 0%, #f0b6d9 100%);
-}
+    #old {
+      background: linear-gradient(to bottom, #a3c8f0 0%, #f0b6d9 100%);
+    }
 
-#pro {
-  background: linear-gradient(to bottom, #f0b6d9 0%, #d8b6f0 100%);
-}
+    #pro {
+      background: linear-gradient(to bottom, #f0b6d9 0%, #d8b6f0 100%);
+    }
 
-#contacts {
-  background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
-}
+    #contacts {
+      background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
+    }
 
-/* плавный переход при скролле */
-.section {
-  transition: background 1.2s ease;
-}
+    /* плавный переход при скролле */
+    .section {
+      transition: background 1.5s ease; /* чуть медленнее для мягкости */
+    }
 
     /* ====== Layout ====== */
     header{position:fixed;left:20px;top:20px;z-index:1200;display:flex;gap:10px}
