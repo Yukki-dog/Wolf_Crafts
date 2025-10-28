@@ -9,7 +9,6 @@
     /* ====== Reset & base ====== */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
-  body{
   body {
   font-family:'Patrick Hand',cursive;
   color:#fff;
@@ -19,40 +18,31 @@
   margin:0;
 }
 
-/* секции с отдельными цветами */
+/* плавный градиент для каждой секции */
 #about {
-  background: #d8b6f0; /* сиреневый */
+  background: linear-gradient(to bottom, #d8b6f0 0%, #d8b6f0 100%);
 }
 
 #best {
-  background: #a3c8f0; /* голубой */
+  background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
 }
 
 #old {
-  background: #f0b6d9; /* розовый */
+  background: linear-gradient(to bottom, #a3c8f0 0%, #f0b6d9 100%);
 }
 
 #pro {
-  background: #d8b6f0; /* сиреневый */
+  background: linear-gradient(to bottom, #f0b6d9 0%, #d8b6f0 100%);
 }
 
 #contacts {
-  background: #a3c8f0; /* голубой */
+  background: linear-gradient(to bottom, #d8b6f0 0%, #a3c8f0 100%);
 }
 
-/* плавный переход между секциями */
+/* плавный переход при скролле */
 .section {
-  transition: background 0.8s ease;
+  transition: background 1.2s ease;
 }
-
-
-    a{color:inherit;text-decoration:none}
-
-    @keyframes bgMove{
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
-    }
 
     /* ====== Layout ====== */
     header{position:fixed;left:20px;top:20px;z-index:1200;display:flex;gap:10px}
